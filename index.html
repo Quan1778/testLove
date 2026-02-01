@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Our Love Story - Facebook Style</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(-45deg, #ff9a9e, #fad0c4, #ffd1ff, #fecfef);
+            --container-bg: rgba(255,255,255,0.85);
+            --card-bg: #ffffff;
+            --text-main: #5a3a4a;
+            --primary-pink: #ff758c;
+            --secondary-pink: #ff7eb3;
+            --shadow: rgba(255,117,140,0.3);
+            --border-color: rgba(255,192,203,0.3);
+        }
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(-45deg, #2c3e50, #000000, #4a192c, #1a0a10);
+            --container-bg: rgba(30,30,30,0.9);
+            --card-bg: #2d2d2d;
+            --text-main: #fce4ec;
+            --primary-pink: #ff4d6d;
+            --secondary-pink: #c70039;
+            --shadow: rgba(0,0,0,0.6);
+            --border-color: rgba(255,255,255,0.1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; transition: all 0.3s ease; }
+        body {
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-main);
+            min-height: 100vh; overflow-x:hidden; padding-bottom:50px;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .theme-toggle { position: fixed; top:20px; right:20px; z-index:1000;
+            background: var(--primary-pink); color:white; border:none;
+            width:45px; height:45px; border-radius:50%; cursor:pointer;
+            box-shadow: 0 4px 10px var(--shadow); font-size:20px;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .heart-bg-container { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1; }
+        .heart-floating { position:absolute; bottom:-10vh; animation: floatUp linear infinite; opacity:0.6; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity:1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity:0; }
+        }
+        .container {
+            max-width:940px; margin:20px auto;
+            background: var(--container-bg); backdrop-filter: blur(15px);
+            border-radius:20px; border:1px solid var(--border-color);
+            box-shadow: 0 10px 30px var(--shadow);
+            animation: fadeInUp 1s ease-out; overflow:hidden;
+        }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(30px);} to { opacity:1; transform:translateY(0);} }
+        .cover-photo { width:100%; height:320px; background:#ddd; overflow:hidden; }
+        .cover-photo img { width:100%; height:100%; object-fit:cover; }
+        .profile-info-wrapper { padding:0 32px; display:flex; align-items:flex-end; margin-top:-60px; margin-bottom:20px; }
+        .avatar-fb { width:170px; height:170px; border-radius:50%; border:5px solid var(--card-bg); overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.2); flex-shrink:0;}
+        .avatar-fb img { width:100%; height:100%; object-fit:cover; }
+        .info-text { margin-left:20px; margin-bottom:20px; }
+        .info-text h1 { font-family: 'Dancing Script', cursive; font-size:38px; color:var(--primary-pink); }
+        .birthday { font-weight:600; font-size:0.95rem; opacity:0.8; margin-top:5px; }
+        .intro-section { padding:0 32px 20px; display:flex; flex-wrap:wrap; gap:20px; }
+        .intro-card { background: var(--card-bg); padding:18px; border-radius:12px; flex:1; min-width:300px; box-shadow:0 4px 10px rgba(0,0,0,0.05); }
+        .intro-card h4 { margin-bottom:12px; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; color:var(--primary-pink); }
+        .hobbies-tags { display:flex; flex-wrap:wrap; gap:8px; }
+        .hobby-item { background:var(--primary-pink); color:white; padding:5px 15px; border-radius:20px; font-size:0.85rem; }
+        .timer-display { font-size:1.05rem; font-weight:700; margin-top:8px; display:block; border-left:3px solid var(--primary-pink); padding-left:10px; }
+        .start-text { font-size:0.95rem; font-weight:600; margin-bottom:6px; color:var(--text-main); opacity:0.9; }
+        .content-body { padding:20px 32px 40px; display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:20px; }
+        .card-post { background:var(--card-bg); border-radius:15px; overflow:hidden; border:1px solid var(--border-color); animation:fadeScaleIn 0.8s ease-out forwards; }
+        @keyframes fadeScaleIn { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
+        .card-img { width:100%; height:200px; overflow:hidden; } .card-img img { width:100%; height:100%; object-fit:cover; }
+        .card-post:hover .card-img img { transform: scale(1.08); }
+        .card-desc { padding:15px; text-align:center; } .card-desc h3 { font-family: 'Dancing Script', cursive; font-size:22px; margin-bottom:15px; }
+        .anim-btn { position:relative; padding:10px 25px; background: linear-gradient(45deg, var(--primary-pink), var(--secondary-pink)); color:white; border:none; border-radius:25px; font-weight:bold; cursor:pointer; overflow:hidden; font-size:13px; }
+        .anim-btn::before { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition:0.5s; }
+        .anim-btn:hover::before { left:100%; } .anim-btn:hover { transform:translateY(-3px); box-shadow:0 5px 15px var(--shadow); }
+
+        /* ---------- LOVE FRAME (ĐANG YÊU) ---------- */
+        .love-frame {
+            background: var(--card-bg);
+            margin: 12px 32px;
+            padding: 14px;
+            border-radius: 14px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            border:1px solid var(--border-color);
+        }
+        .love-avatar-wrap { display:flex; flex-direction:column; align-items:center; gap:8px; width:110px; }
+        .love-avatar {
+            width:96px;
+            height:96px;
+            border-radius:50%;
+            overflow:hidden;
+            border:4px solid var(--primary-pink);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            flex-shrink:0;
+            background:linear-gradient(180deg, rgba(255,255,255,0.2), rgba(0,0,0,0.02));
+        }
+        .love-avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+
+        .lover-name {
+            font-weight:700;
+            font-size:0.95rem;
+            color:var(--text-main);
+            text-align:center;
+            max-width:110px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
+
+        .love-center {
+            display:flex; flex-direction:column; align-items:center; gap:6px;
+            min-width:120px;
+        }
+        .love-heart {
+            font-size:44px;
+            line-height:1;
+            display:inline-block;
+            animation: heartBeat 1.1s infinite;
+            transform-origin: center center;
+            text-shadow: 0 6px 18px rgba(199,0,57,0.12);
+        }
+        .love-status {
+            font-weight:700; color:var(--primary-pink); font-size:0.95rem;
+        }
+        @keyframes heartBeat {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+            20% { transform: scale(1.25); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* small responsiveness */
+        @media (max-width:640px) {
+            .love-frame { gap:12px; padding:12px; margin:10px 16px; }
+            .love-avatar { width:72px; height:72px; }
+            .love-avatar-wrap { width:90px; }
+            .love-center { min-width:80px; }
+            .love-heart { font-size:36px; }
+            .lover-name { max-width:90px; font-size:0.9rem; }
+        }
+        /* --------------------------------------------- */
+
+        @media (max-width:768px) {
+            .profile-info-wrapper { flex-direction:column; align-items:center; text-align:center; margin-top:-85px; }
+            .info-text { margin-left:0; margin-top:10px; } .cover-photo { height:220px; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" id="themeToggle" title="Chuyển chế độ">🌓</button>
+    <div class="heart-bg-container" id="heartBg"></div>
+
+    <div class="container">
+        <header class="header-profile">
+            <div class="cover-photo">
+                <img id="coverImg" src="" alt="Cover">
+            </div>
+            <div class="profile-info-wrapper">
+                <div class="avatar-fb"><img id="avatarImg" src="" alt="Avatar"></div>
+                <div class="info-text">
+                    <h1 id="userName"></h1>
+                    <p class="birthday">📅 <span id="userBirth"></span></p>
+                </div>
+            </div>
+        </header>
+
+        <!-- LOVE FRAME: Đang yêu (2 avatar + animated heart + tên dưới avatar) -->
+        <div class="love-frame" id="loveFrame">
+            <div class="love-avatar-wrap">
+                <div class="love-avatar">
+                    <img id="lover1" src="" alt="Lover 1">
+                </div>
+                <div class="lover-name" id="lover1Name">—</div>
+            </div>
+
+            <div class="love-center">
+                <div class="love-heart" id="loveHeart">❤️</div>
+                <div class="love-status" id="loveStatusText">Đang yêu</div>
+            </div>
+
+            <div class="love-avatar-wrap">
+                <div class="love-avatar">
+                    <img id="lover2" src="" alt="Lover 2">
+                </div>
+                <div class="lover-name" id="lover2Name">—</div>
+            </div>
+        </div>
+
+        <div class="intro-section">
+            <div class="intro-card">
+                <h4>Sở thích của cô ấy</h4>
+                <div class="hobbies-tags" id="hobbiesContainer"></div>
+            </div>
+            <div class="intro-card">
+                <h4>Hành trình tình yêu</h4>
+
+                <!-- START DATES: hiển thị rõ ngày bắt đầu -->
+                <div class="timer-display">
+                    <div class="start-text" id="knownStartText">Bắt đầu: —</div>
+                    <div id="knownClock">Đã quen: Đang tính...</div>
+                </div>
+
+                <div class="timer-display">
+                    <div class="start-text" id="loveStartText">Bắt đầu: —</div>
+                    <div id="loveClock">Đã yêu: Đang tính...</div>
+                </div>
+                <!-- END START DATES -->
+
+            </div>
+        </div>
+
+        <main class="content-body" id="postGrid"></main>
+    </div>
+
+    <script>
+        /*******************************
+         *  CHỈ CẦN SỬA CHỖ NÀY THÔI:
+         *  - Bạn có thể dùng ISO string, Date object, hoặc object {year,month,day,...}
+         *  - Thay đổi updateIntervalMs để chỉnh tần suất cập nhật (ms)
+         *  - Avatars và tên lover1/lover2: cấu hình trong LOVE_CONFIG
+         *******************************/
+        const LOVE_CONFIG = {
+            avatar: "./image/avatar.jpg",
+            background: "./image/background.jpeg",
+            // Avatars cho khung "Đang yêu" (thay đường dẫn ở đây)
+            lover1: "./image/avatar.jpg",
+            lover2: "./image/avatar2.png",
+            // Tên hiển thị dưới avatar
+            lover1Name: "Ng Ana",
+            lover2Name: "Quân Nagato",
+            name: "Ng Ana",
+            birthday: "Sinh ngày: 2 tháng 11, 2012",
+            hobbies: ["Vẽ", "Đọc truyện", "Viết truyện", "Nghe nhạc", "Làm đồ thủ công"],
+            // MẶC ĐỊNH THEO YÊU CẦU:
+            timeKnown: "2026-01-01T00:00:00",   // Đã quen: từ 01/01/2026
+            timeLove:  "2026-01-03T00:00:00",   // Đã yêu:  từ 03/01/2026
+            posts: [
+                { img: "./image/background.jpeg", title: "Kỷ niệm ngày đầu", btnText: "Xem lại" },
+                { img: "./image/avatar.jpg", title: "Khoảnh khắc hạnh phúc", btnText: "Chi tiết" },
+                { img: "./image/background.jpeg", title: "Chặng đường phía trước", btnText: "Khám phá" }
+            ],
+            // Tùy chọn hiển thị / cập nhật
+            displayOptions: {
+                updateIntervalMs: 1000,         // chỉnh tần suất cập nhật (ms)
+                showYearsMonths: true,          // có hiển thị "x năm y tháng" hay không
+                formatTemplate: "{totalDays} ngày ({y} năm {m} tháng {d} ngày) {hh}h {mm}m {ss}s"
+            }
+        };
+
+        /*******************************
+         *  Helpers: parse config time
+         *******************************/
+        function parseConfigTime(v) {
+            if (!v) return null;
+            // Nếu đã là Date hợp lệ
+            if (v instanceof Date && !isNaN(v)) return v;
+            // Nếu là chuỗi (ISO)
+            if (typeof v === 'string') {
+                const d = new Date(v);
+                if (!isNaN(d)) return d;
+            }
+            // Nếu là object {year,month,...}
+            if (typeof v === 'object') {
+                const y = v.year ?? 1970;
+                const mo = (v.month ?? 1) - 1; // tháng 1-based trong config
+                const day = v.day ?? 1;
+                const hh = v.hour ?? 0;
+                const mm = v.minute ?? 0;
+                const ss = v.second ?? 0;
+                const d = new Date(y, mo, day, hh, mm, ss);
+                if (!isNaN(d)) return d;
+            }
+            return null;
+        }
+
+        // Gán dữ liệu cơ bản
+        document.getElementById('avatarImg').src = LOVE_CONFIG.avatar;
+        document.getElementById('coverImg').src = LOVE_CONFIG.background;
+        document.getElementById('userName').innerText = LOVE_CONFIG.name;
+        document.getElementById('userBirth').innerText = LOVE_CONFIG.birthday;
+        document.getElementById('hobbiesContainer').innerHTML =
+            LOVE_CONFIG.hobbies.map(h => `<span class="hobby-item">${h}</span>`).join('');
+
+        // Gán avatars và tên cho khung Đang yêu
+        const lover1El = document.getElementById('lover1');
+        const lover2El = document.getElementById('lover2');
+        const lover1NameEl = document.getElementById('lover1Name');
+        const lover2NameEl = document.getElementById('lover2Name');
+
+        if (lover1El) lover1El.src = LOVE_CONFIG.lover1 || LOVE_CONFIG.avatar;
+        if (lover2El) lover2El.src = LOVE_CONFIG.lover2 || LOVE_CONFIG.avatar;
+        if (lover1NameEl) lover1NameEl.innerText = LOVE_CONFIG.lover1Name || "";
+        if (lover2NameEl) lover2NameEl.innerText = LOVE_CONFIG.lover2Name || "";
+
+        // Grid nội dung
+        const postGrid = document.getElementById('postGrid');
+        LOVE_CONFIG.posts.forEach((post, i) => {
+            const card = document.createElement('div');
+            card.className = 'card-post';
+            card.style.animationDelay = `${0.3 + (i * 0.18)}s`;
+            card.innerHTML = `
+                <div class="card-img"><img src="${post.img}" alt=""></div>
+                <div class="card-desc">
+                    <h3>${post.title}</h3>
+                    <button class="anim-btn">${post.btnText}</button>
+                </div>`;
+            postGrid.appendChild(card);
+        });
+
+        /*******************************
+         *  Tính toán khoảng thời gian:
+         *  robust borrowing (seconds->minutes->hours->days->months->years)
+         *******************************/
+        function calcYMD(start, end) {
+            // start, end: Date
+            const s = new Date(start.getTime());
+            const e = new Date(end.getTime());
+
+            let y = e.getFullYear() - s.getFullYear();
+            let m = e.getMonth() - s.getMonth();
+            let d = e.getDate() - s.getDate();
+            let hh = e.getHours() - s.getHours();
+            let mm = e.getMinutes() - s.getMinutes();
+            let ss = e.getSeconds() - s.getSeconds();
+
+            if (ss < 0) { ss += 60; mm -= 1; }
+            if (mm < 0) { mm += 60; hh -= 1; }
+            if (hh < 0) { hh += 24; d -= 1; }
+            if (d < 0) {
+                // Lấy số ngày của tháng trước (của `e`)
+                const prevMonthLastDay = new Date(e.getFullYear(), e.getMonth(), 0).getDate();
+                d += prevMonthLastDay;
+                m -= 1;
+            }
+            if (m < 0) { m += 12; y -= 1; }
+
+            return { y, m, d, hh, mm, ss };
+        }
+
+        function formatTimeDetail(startDate, template, displayOptions) {
+            const now = new Date();
+            if (!startDate || isNaN(startDate)) return "Không hợp lệ";
+            if (now < startDate) return "Chưa tới thời điểm";
+
+            const diff = now - startDate;
+            const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const t = calcYMD(startDate, now);
+
+            // zero-pad for hh/mm/ss
+            const pad = (n) => String(n).padStart(2, '0');
+
+            let out = template
+                .replace(/\{totalDays\}/g, totalDays)
+                .replace(/\{y\}/g, t.y)
+                .replace(/\{m\}/g, t.m)
+                .replace(/\{d\}/g, t.d)
+                .replace(/\{hh\}/g, pad(t.hh))
+                .replace(/\{mm\}/g, pad(t.mm))
+                .replace(/\{ss\}/g, pad(t.ss));
+
+            if (displayOptions && displayOptions.showYearsMonths === false) {
+                // Nếu không muốn hiển thị năm/tháng: loại bỏ phần "(... )" nếu có
+                out = out.replace(/\([^)]*\)/g, '').trim();
+            }
+
+            return out;
+        }
+
+        // Lấy thời gian đã parse từ config
+        const parsedKnown = parseConfigTime(LOVE_CONFIG.timeKnown);
+        const parsedLove = parseConfigTime(LOVE_CONFIG.timeLove);
+
+        function pad2(n){ return String(n).padStart(2,'0'); }
+        function formatStartDate(d){
+            if (!d || isNaN(d)) return "Không hợp lệ";
+            const dd = pad2(d.getDate());
+            const mm = pad2(d.getMonth()+1);
+            const yy = d.getFullYear();
+            // chỉ hiển thị dd/mm/yyyy theo yêu cầu
+            return `${dd}/${mm}/${yy}`;
+        }
+
+        function updateClocks() {
+            const opt = LOVE_CONFIG.displayOptions || {};
+            const tpl = opt.formatTemplate || "{totalDays} ngày ({y} năm {m} tháng {d} ngày) {hh}h {mm}m {ss}s";
+            document.getElementById('knownClock').innerText = "Đã quen: " + formatTimeDetail(parsedKnown, tpl, opt);
+            document.getElementById('loveClock').innerText = "Đã yêu: " + formatTimeDetail(parsedLove, tpl, opt);
+
+            // Set start date text
+            const ks = document.getElementById('knownStartText');
+            const ls = document.getElementById('loveStartText');
+            if (ks) ks.innerText = "Bắt đầu: " + formatStartDate(parsedKnown);
+            if (ls) ls.innerText = "Bắt đầu: " + formatStartDate(parsedLove);
+        }
+
+        // Chạy đồng hồ theo interval trong config
+        const intervalMs = (LOVE_CONFIG.displayOptions && LOVE_CONFIG.displayOptions.updateIntervalMs) || 1000;
+        setInterval(updateClocks, intervalMs);
+        updateClocks();
+
+        // Dark/Light Mode
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            if (document.body.getAttribute('data-theme') === 'dark') {
+                document.body.removeAttribute('data-theme'); themeToggle.innerText = "🌓";
+            } else { document.body.setAttribute('data-theme', 'dark'); themeToggle.innerText = "☀️"; }
+        });
+
+        // Trái tim bay (nhẹ nhàng)
+        function createHearts() {
+            const bg = document.getElementById('heartBg');
+            const icons = ['❤️','💖','💕','🌸'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-floating';
+                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 12 + 12) + 'px';
+                heart.style.animationDuration = (Math.random() * 5 + 7) + 's';
+                bg.appendChild(heart);
+                setTimeout(() => heart.remove(), 9000);
+            }, 650);
+        }
+        createHearts();
+    </script>
+
+</body>
+</html>
